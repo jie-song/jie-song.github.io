@@ -4,6 +4,7 @@ node_modules/
 # Ignore environment variables/secrets
 .env
 config.py
+.gitignore
 
 # Ignore build outputs
 assets/images/old
