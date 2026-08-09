@@ -1,0 +1,13 @@
+# Ignore node dependencies
+node_modules/
+
+# Ignore environment variables/secrets
+.env
+config.py
+
+# Ignore build outputs
+assets/images/old
+
+# Ignore OS-specific system files
+.DS_Store
+Thumbs.db
