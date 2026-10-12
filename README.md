@@ -57,7 +57,7 @@ To use a different photo, put it in `assets/images/` and update the `src` value 
 
 Put the CV at:
 
-`assets/cv.pdf`
+`assets/cv_song.pdf`
 
 Both CV links already point to that file. Keeping the filename unchanged lets you replace the PDF later without editing the page.
 
