@@ -177,6 +177,24 @@ nav a:hover {
   font-weight: 400;
 }
 
+.introduction .market-status,
+.introduction .references-label {
+  font-weight: 700;
+}
+
+.introduction .references {
+  margin-top: -6px;
+}
+
+.references a {
+  white-space: nowrap;
+}
+
+.references-separator {
+  margin-inline: 0.2em;
+  color: #a0a0a0;
+}
+
 .research-subsection {
   padding-block: 42px 52px;
   border-top: 1px solid var(--line);
