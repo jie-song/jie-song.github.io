@@ -220,19 +220,72 @@
   <script data-goatcounter="https://jie-song.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 
-  <!-- Visit counter: one count per browser tab session, by day, approximate place and network name (no IP stored). -->
+  <!-- Visit counter: one count per browser tab session, by day, approximate place and network name. Also active time on the page and clicks on the JMP and CV links, as daily totals per network (no IP stored). -->
   <script>
     (function () {
+      var base = 'https://jie-visits.jie-song.workers.dev/';
+      var path = encodeURIComponent(location.pathname);
+      var seen = false;
       try {
         if (location.protocol !== 'https:') return;
         if (navigator.globalPrivacyControl) return;
         if (localStorage.getItem('skipgc') === 't') return; // same switch as GoatCounter's #toggle-goatcounter
-        if (sessionStorage.getItem('visit-logged')) return;
-        sessionStorage.setItem('visit-logged', '1');
+        seen = !!sessionStorage.getItem('visit-logged');
+        if (!seen) sessionStorage.setItem('visit-logged', '1');
       } catch (e) {}
-      var u = 'https://jie-visits.jie-song.workers.dev/hit?p=' + encodeURIComponent(location.pathname);
-      if (navigator.sendBeacon) navigator.sendBeacon(u);
-      else fetch(u, { method: 'POST', mode: 'no-cors', keepalive: true });
+
+      function send(name, query) {
+        var u = base + name + '?p=' + path + (query || '');
+        if (navigator.sendBeacon) navigator.sendBeacon(u);
+        else fetch(u, { method: 'POST', mode: 'no-cors', keepalive: true });
+      }
+
+      if (!seen) send('hit');
+
+      // Active time: whole seconds while the tab is in front and there was input in the last 45 seconds.
+      var IDLE_MS = 45000, MARKS = [15, 60, 180];
+      var lastInput = 0, active = 0, pending = 0, hi = 0;
+      try { hi = parseInt(sessionStorage.getItem('visit-mark') || '0', 10) || 0; } catch (e) {}
+      ['pointermove', 'pointerdown', 'scroll', 'wheel', 'keydown', 'touchstart'].forEach(function (t) {
+        window.addEventListener(t, function () { lastInput = Date.now(); }, { passive: true, capture: true });
+      });
+
+      function flush() {
+        var marks = MARKS.filter(function (m) { return m > hi && active >= m; });
+        if (!pending && !marks.length) return;
+        var q = '&s=' + pending;
+        if (marks.length) {
+          q += '&m=' + marks.join(',');
+          hi = marks[marks.length - 1];
+          try { sessionStorage.setItem('visit-mark', String(hi)); } catch (e) {}
+        }
+        pending = 0;
+        send('e', q);
+      }
+
+      setInterval(function () {
+        if (document.visibilityState === 'visible' && Date.now() - lastInput < IDLE_MS) {
+          active++; pending++;
+          if (pending >= 300) flush();
+        }
+      }, 1000);
+      document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flush(); });
+      window.addEventListener('pagehide', flush);
+
+      // Clicks on the paper and CV links (the PDFs cannot run this script, so the click is the only trace).
+      var clicked = {};
+      function onLink(e) {
+        var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+        if (!a) return;
+        var h = a.getAttribute('href') || '', k = '';
+        if (h.indexOf('municipal_incorporation_song.pdf') > -1) k = 'jmp';
+        else if (h.indexOf('cv_song.pdf') > -1) k = 'cv';
+        if (!k || clicked[k]) return;
+        clicked[k] = true;
+        send('e', '&k=' + k);
+      }
+      document.addEventListener('click', onLink, true);
+      document.addEventListener('auxclick', onLink, true);
     })();
   </script>
 </body>
