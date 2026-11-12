@@ -212,6 +212,7 @@
 
       <footer>
         <p>&copy; 2026 Jie Song. Last updated on Nov 2026.</p>
+        <p>This site counts visits without cookies. It keeps only daily totals by approximate location and network name, and never stores IP addresses.</p>
       </footer>
     </div>
   </div>
@@ -219,5 +220,21 @@
   <!-- GoatCounter: cookie-free visit counter (dashboard: https://jie-song.goatcounter.com) -->
   <script data-goatcounter="https://jie-song.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
+
+  <!-- Visit counter: one count per browser tab session, by day, approximate place and network name (no IP stored). -->
+  <script>
+    (function () {
+      try {
+        if (location.protocol !== 'https:') return;
+        if (navigator.globalPrivacyControl) return;
+        if (localStorage.getItem('skipgc') === 't') return; // same switch as GoatCounter's #toggle-goatcounter
+        if (sessionStorage.getItem('visit-logged')) return;
+        sessionStorage.setItem('visit-logged', '1');
+      } catch (e) {}
+      var u = 'https://jie-visits.jie-song.workers.dev/hit?p=' + encodeURIComponent(location.pathname);
+      if (navigator.sendBeacon) navigator.sendBeacon(u);
+      else fetch(u, { method: 'POST', mode: 'no-cors', keepalive: true });
+    })();
+  </script>
 </body>
 </html>
