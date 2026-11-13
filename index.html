@@ -229,6 +229,7 @@
       try {
         if (location.protocol !== 'https:') return;
         if (navigator.globalPrivacyControl) return;
+        if (location.hash === '#toggle-goatcounter') return; // this load only flips the switch; GoatCounter's script does that after this one has run
         if (localStorage.getItem('skipgc') === 't') return; // same switch as GoatCounter's #toggle-goatcounter
         seen = !!sessionStorage.getItem('visit-logged');
         if (!seen) sessionStorage.setItem('visit-logged', '1');
