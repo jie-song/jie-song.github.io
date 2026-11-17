@@ -433,6 +433,11 @@ nav a:hover {
   font-size: 0.84rem;
 }
 
+/* note that applies to the whole course list: set it apart from the last course */
+.teaching-list + .teaching-note {
+  margin-top: 16px;
+}
+
 footer {
   padding-top: 28px;
   border-top: 1px solid var(--line);
