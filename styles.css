@@ -318,7 +318,8 @@ nav a:hover {
   font-size: 0.93rem;
 }
 
-/* Justified text: abstracts, project descriptions and (multi-line) paper titles */
+/* Justified text: self-introduction, abstracts, project descriptions and (multi-line) paper titles */
+.introduction .intro-text,
 .abstract-text p,
 .project-summary,
 .paper-text h3,
