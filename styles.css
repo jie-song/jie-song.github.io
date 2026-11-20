@@ -312,6 +312,12 @@ nav a:hover {
   font-size: 0.93rem;
 }
 
+/* Work in Progress descriptions: same font and size as the job market paper abstract */
+.project-summary {
+  font-family: var(--sans);
+  font-size: 0.93rem;
+}
+
 /* .visual-summary {
   margin: 0;
 }
