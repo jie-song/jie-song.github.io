@@ -233,7 +233,7 @@ nav a:hover {
 }
 
 .paper-text h3 {
-  font-size: 1.45rem;
+  font-size: 1.4rem;
 }
 
 .coauthors,
@@ -316,6 +316,14 @@ nav a:hover {
 .project-summary {
   font-family: var(--sans);
   font-size: 0.93rem;
+}
+
+/* Justified text: abstracts, project descriptions and (multi-line) paper titles */
+.abstract-text p,
+.project-summary,
+.paper-text h3,
+.research-item h3 {
+  text-align: justify;
 }
 
 /* .visual-summary {
